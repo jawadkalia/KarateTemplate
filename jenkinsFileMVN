@@ -1,0 +1,16 @@
+// This jenkinsfile will run a maven based project build on an executor exclusively for projects that use maven.
+pipeline {
+     
+    agent {label 'rcetfsapjnk002'}
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean verify'
+            }
+        }
+    }
+}
+
+def generateCucumberReports() {
+    cucumber fileIncludePattern: '**/TEST-*.json', sortingMethod: 'ALPHABETICAL'
+}

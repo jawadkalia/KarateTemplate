@@ -1,0 +1,68 @@
+slackChannels=[]
+slackChannels.add('red-books')
+message = 'Hello World!'
+
+node('docker') { 
+    try {
+        cleanWs()
+        stage('Updating to Latest Code') {
+            git branch: 'master', credentialsId: 'dc22f127-c0d3-4b56-afc7-86d671d07bac', url: 'https://github.realpage.com/realpage/rbk-RedBookAPIAutomation'
+
+        }
+        stage('Build') {
+            sh 'echo "RDBOOKS"'
+            }
+       
+        }
+        
+    catch (Exception e){
+        throw e
+    }
+
+    finally {
+        // stage('Generate Cucumber Reports'){
+        //     generateCucumberReports()
+        //     }
+        // stage('Generate Email Report'){
+        //     def files = findFiles(glob: '**/results-json.txt')
+        //     def props = readFile(files[0].toString())
+        //     def myObject = readJSON text: props;
+        //     def percentage = myObject.passed/myObject.scenarios * 100
+
+        //     emailext body: "<h2 style='color:#f66021; font-family: Verdana, Geneva, Tahoma, sans-serif'>TestReport for UNIFIED SETTINGS API on QA environment</h2> <h3>Automation job number ${env.BUILD_NUMBER} on QA env completed with ${myObject.failed} scenarios failing out of ${myObject.scenarios} total </i></b></h3>Test Details<ol style='list-style-type:disc'><li>Pass Percentage: ${percentage}</li><li>Total Scenarios ${myObject.scenarios}, Total Failed: ${myObject.failed}</li><li>Build Duration : ${currentBuild.durationString}</li><li><a href='${env.BUILD_URL}'>Build Link ${env.BUILD_NUMBER}</a></li><li><a href='${env.BUILD_URL}cucumber-html-reports/overview-features.html'>Report Link</a></li></ol><a href='${env.BUILD_URL}cucumber-html-reports/overview-trends.html'>Run History</a><p>Failed Scenario Details: <a href='${env.BUILD_URL}cucumber-html-reports/overview-failures.html'></a></p><p>Use your corporate account to sign in and view reports. e.g Jawad Kalia will sign in as jkalia</p>",subject: "UNIFIED SETTINGS API test job on QA number:${env.BUILD_NUMBER} has ${currentBuild.result} with ${myObject.failed} failed scenarios" , to: 'jawad.kalia@realpage.com', mimeType: 'text/html'
+        // }
+        stage('Clean up Workspace'){
+            sh 'echo "hello test"'
+            cleanWs()
+        }
+        stage('Notify Slack'){
+        def slacks = [:]
+        for(int i = 0; i < slackChannels.size(); i++) { 
+            def slackChannel = slackChannels[i]
+            slacks["${slackChannel}"] = {
+                withCredentials([string(credentialsId: 'devops-jenkins-slack', variable: 'TOKEN')]) {
+                    def post = new URL('https://realpage.slack.com/api/chat.postMessage').openConnection();
+                    def payload = "as_user=true&token=${TOKEN}&channel=${slackChannel}&text=${message}"
+                    post.setRequestMethod("POST")
+                    post.setDoOutput(true)
+                    post.getOutputStream().write(payload.getBytes("UTF-8"));
+                    def postRC = post.getResponseCode();
+                    println(postRC);
+                    if(postRC.equals(200)) {
+                        println(post.getInputStream().getText());
+                    }                
+                }                    
+            }
+        }
+        parallel slacks
+    }
+        
+        
+
+}}
+def generateCucumberReports() {
+    cucumber fileIncludePattern: '**/rdbk.**.json', sortingMethod: 'ALPHABETICAL', buildStatus: 'UNSTABLE'
+}
+
+
+

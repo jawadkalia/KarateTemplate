@@ -1,0 +1,8 @@
+# update all instance of myproject in the gitignore file as well
+/target
+.DS_Store
+*.class
+myproject/target
+myproject/bin
+myproject/.settings
+.vscode

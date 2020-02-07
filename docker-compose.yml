@@ -1,0 +1,21 @@
+# This will build up a jdk image and karate.jar file and run the tests. This is can be shipped to anywhere and run from anywhere, provided docker is installed.
+
+# Create a seperate file for each environment and make sure to have the correct -e for the command section
+
+version: "2.0"
+services:
+  karate:
+    image: jawadkalia/karate-maven:latest
+    volumes:
+        - ./:/myproject
+    command: mvn clean test
+    depends_on:
+        - cleanup
+
+  cleanup:
+    image: jawadkalia/karate-maven:latest
+    volumes:
+        - ./:/myproject
+    command: rm -rf myproject/target 
+
+# command: -t which tags to run. multiple tag runs will have a seperate -t, - e is the environment you want to run the tests against. https://github.com/intuit/karate/tree/master/karate-netty#usage for more information on how to run the karate.jar file

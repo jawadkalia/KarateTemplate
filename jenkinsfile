@@ -1,0 +1,31 @@
+// This is the scripted jenkins pipeline file. This will be specific for each environment
+node('docker') { // this will run the file in the docker specialized from the jenkins executors
+    try{
+        stage('Updating to Latest Code') {
+            git branch: 'master', credentialsId: 'dc22f127-c0d3-4b56-afc7-86d671d07bac', url: 'https://github.realpage.com/EQA/Karate_Template'
+            // update with your github repository url. You can update your repository name in the settings section on web. github.realpage.com
+
+        }
+        stage('Build') {
+            sh 'docker-compose -f docker-composeQA.yml up' // Running the tests using docker
+            }
+        stage('Generating Reports') {
+            generateCucumberReports() // generate cucumber reports using the builtin jenkins cucumber plugin
+        }
+        stage('Emails') {
+                    /* This is just a template. This needs more work. we are planning to add a email templating approach.*/
+                    emailext body: "<h2 style='color:#f66021; font-family: Verdana, Geneva, Tahoma, sans-serif'>Test Report for Unified Settings API on QA environment</h2><h3>Automation job number ${env.BUILD_NUMBER} on QA env completed with status <b><i>${currentBuild.currentResult}</i></b></h3>Test Details<ol style='list-style-type:disc'><li>Test Result: ${currentBuild.currentResult}</li><li>Build Duration : ${currentBuild.durationString}</li><li><a href='${env.BUILD_URL}'>Build Link ${env.BUILD_NUMBER}</a></li><li><a href='${env.BUILD_URL}cucumber-html-reports/overview-features.html'>Report Link</a></li></ol><a href='${env.BUILD_URL}cucumber-html-reports/overview-trends.html'>Run History</a><p>",subject: '$DEFAULT_SUBJECT', to: 'jawad.kalia@realpage.com, Iqbal.Yusuff@RealPage.com', mimeType: 'text/html'
+
+                    // add your emails in the `to:` section
+                }
+            }
+    finally{
+        stage('Destroying containers') { // Clean up task
+            sh 'docker-compose -f docker-composeQA.yml down'
+        }
+    }
+}
+
+def generateCucumberReports() { // reusable function to generate pretty cucumber reports
+    cucumber fileIncludePattern: '**/TEST-*.json', sortingMethod: 'ALPHABETICAL', buildStatus: 'UNSTABLE', parallelTesting: true
+}
