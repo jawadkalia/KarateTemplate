@@ -12,14 +12,13 @@ Please check the [FAQ](#faq) section for troubleshooting
 use ctrl+click on links
 
 - Required
-    - Karate requires Java 8 (at least version 1.8.0_112 or greater) and then either [Maven](https://maven.apache.org/install.html) or [Eclipse](https://www.eclipse.org/downloads/) to be installed. Realpage provides licensed version of Eclipse
+    - Karate requires Java 8 (at least version 1.8.0_112 or greater) and then either [Maven](https://maven.apache.org/install.html) or [Eclipse](https://www.eclipse.org/downloads/) to be installed. 
     - [Git](https://gitforwindows.org/) Installation 
     - [Docker](https://www.docker.com/get-started) installation
         - A nice [video intro](https://www.youtube.com/watch?v=S7NVloq0EBc) to docker concepts on windows
         - If you have a windows machine. please do the steps in this [blog](https://blogs.technet.microsoft.com/canitpro/2015/09/08/step-by-step-enabling-hyper-v-for-use-on-windows-10/) and then [download](https://store.docker.com/editions/community/docker-ce-desktop-windows) docker installer and run it. Also consider switching to a mac.
 
 - Suggested
-    - [Slack](https://slack.com/downloads/) for communication with Other QA engineers! join the Realpage-qa [channel](https://realpage.slack.com/messages/C8MLUDLQY)
     - [SourceTree](https://product-downloads.atlassian.com/software/sourcetree/ga/Sourcetree_3.0_200.zip?_ga=2.13605623.1310353568.1540920405-56241059.1540920405) GIT GUI
     - [VSCode](https://code.visualstudio.com/download) text editor
     - [Cmdr](http://cmder.net/) command line emulation to run different type of terminals and shell on Windows and make it look cool!! it also allows you to use zShell
@@ -127,7 +126,6 @@ Docker is :cool:
 * [Eclipse QuickStart For Karate](https://github.com/intuit/karate#eclipse-quickstart)
 * [Hello World](https://github.com/intuit/karate#hello-world)
 * [Real world Examples](https://github.com/intuit/karate/tree/master/karate-demo)
-* [RealPage Reference Project](https://github.realpage.com/realpage/rbk-RedBookAPIAutomation)
 
 Must read Sections from the original karate documentation
 
