@@ -165,4 +165,4 @@ Karate is developed by Peter Thomas. I recommend very strongly to go through the
 
 Enjoy!
 
-[Jawad Kalia](https://github.realpage.com/jawad-kalia) :sunglasses:
+[Jawad Kalia] :sunglasses:
